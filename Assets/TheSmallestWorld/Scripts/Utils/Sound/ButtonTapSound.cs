@@ -18,6 +18,6 @@ public class ButtonTapSound : MonoBehaviour
 
     private void PlayTapSound()
     {
-
+        AudioManager.instance?.PlayClipByIndex(0);
     }
 }

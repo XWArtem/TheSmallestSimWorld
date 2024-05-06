@@ -8,6 +8,9 @@ public class ProjectContext : MonoBehaviour
     [SerializeField] private InputHandButton inputHandButton;
     [SerializeField] private List<Vendor> vendors = new List<Vendor>();
     [SerializeField] private LevelSceneController levelSceneController;
+    [SerializeField] private PopupShopController vendorController;
+    [SerializeField] private ResourcesDisplay resourcesDisplay;
+    [SerializeField] private List<TreeView> trees;
 
     private void Awake()
     {
@@ -18,8 +21,15 @@ public class ProjectContext : MonoBehaviour
             vendor.Init(mainHero);
         }
 
+        int treesIndex = Random.Range(0, 4);
 
+        foreach(var tree in trees)
+        {
+            tree.Init(treesIndex);
+        }
 
+        vendorController.Init();
+        resourcesDisplay.Init();
 
 
 

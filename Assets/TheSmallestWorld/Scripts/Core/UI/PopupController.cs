@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PopupController : MonoBehaviour
 {
-    [SerializeField] private PopupVendor vendor;
+    [SerializeField] private PopupShopController vendor;
 
 
     private void OnEnable()

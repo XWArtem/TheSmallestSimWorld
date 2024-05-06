@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Vendor : MonoBehaviour, IInteractable
@@ -19,22 +17,29 @@ public class Vendor : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        shopCallDelegate = CallForShopUI;
-        shopAction = CallForShopUI;
-
+        shopCallDelegate = CallForShopUIShow;
+        shopAction = CallForShopUIShow;
         interactionArea.Init(this);
     }
 
     public void SetInteractactionStatus(bool interactionAvailable)
     {
+        if (!interactionAvailable)
+        {
+            CallForShopUIHide();
+        }
         mainHero.SetInteractionStatus(this, interactionAvailable, shopAction);
 
         // hello or bye animation
     }
 
-    private void CallForShopUI()
+    private void CallForShopUIShow()
     {
-        Debug.Log("Call for shop");
         StaticActions.OnVendorCanvasShow?.Invoke();
+    }
+
+    public void CallForShopUIHide()
+    {
+        StaticActions.OnVendorCanvasHide?.Invoke();
     }
 }
