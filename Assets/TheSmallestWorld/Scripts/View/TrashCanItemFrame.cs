@@ -1,9 +1,11 @@
 using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopItemFrame : MonoBehaviour
+public class TrashCanItemFrame : MonoBehaviour
 {
     [SerializeField] private Image itemImage;
     [SerializeField] private TextMeshProUGUI costText;
@@ -16,7 +18,7 @@ public class ShopItemFrame : MonoBehaviour
     private void OnEnable()
     {
         StaticActions.OnItemsChanged += UpdateFrameInfo;
-        actionButton.onClick.AddListener(() => BuyItem(itemBase.Cost, itemBase.ID));
+        actionButton.onClick.AddListener(() => SellItem(itemBase.Cost, itemBase.ID));
     }
 
     public void InitFrame(ItemBase itemBase)
@@ -26,13 +28,13 @@ public class ShopItemFrame : MonoBehaviour
         UpdateFrameInfo();
     }
 
-    private void UpdateFrameInfo()
+    public void UpdateFrameInfo()
     {
         costText.text = $"{itemBase.Cost}";
         itemLabel.text = $"{itemBase.Name}";
 
-        actionButton.interactable = ButtonBuyAvailable(itemBase.Cost, itemBase.ID);
-        actionButtonText.text = !UserInGameData.Instance.ItemIsAvailable(itemBase.ID) ? "Buy" : "Bought";
+        actionButton.interactable = ButtonSellAvailable(itemBase.ID);
+        actionButtonText.text = UserInGameData.Instance.ItemIsAvailable(itemBase.ID) ? "Sell" : "Sold";
     }
 
     private void OnDisable()
@@ -41,18 +43,23 @@ public class ShopItemFrame : MonoBehaviour
         StaticActions.OnItemsChanged -= UpdateFrameInfo;
     }
 
-    private bool ButtonBuyAvailable(int cost, int itemID)
+    private bool ButtonSellAvailable(int itemID)
     {
-        return UserInGameData.Instance.Coins >= cost && !UserInGameData.Instance.ItemIsAvailable(itemID);
+        return UserInGameData.Instance.ItemIsAvailable(itemID);
     }
 
-    private void BuyItem(int cost, int itemID)
+    private void SellItem(int cost, int itemID)
     {
-        if (UserInGameData.Instance.Coins >= cost)
+        if (UserInGameData.Instance.ItemIsAvailable(itemID))
         {
             AudioManager.instance?.PlayClipByIndex(2);
-            UserInGameData.Instance.Coins -= cost;
-            UserInGameData.Instance.SetItemAvailability(itemID, true);
+            UserInGameData.Instance.Coins += cost/2;
+            UserInGameData.Instance.SetItemAvailability(itemID, false);
+            if (UserInGameData.Instance.WeaponSelectedIndex == itemID)
+            {
+                UserInGameData.Instance.WeaponSelectedIndex = 0;
+            }
+            StaticActions.OnItemSelectedChanged?.Invoke();
 
             var rect = actionButton.GetComponent<RectTransform>();
             rect.DOScale(0.8f, 0.2f).

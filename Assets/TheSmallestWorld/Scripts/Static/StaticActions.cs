@@ -2,6 +2,9 @@ using System;
 
 public class StaticActions
 {
+    public static Action OnTrashCanShow;
+    public static Action OnTrashCanHide;
+
     public static Action OnVendorCanvasShow;
     public static Action OnVendorCanvasHide;
 

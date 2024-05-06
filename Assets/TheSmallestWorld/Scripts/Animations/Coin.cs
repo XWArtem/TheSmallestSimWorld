@@ -1,14 +1,22 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class AnimationCoin : MonoBehaviour
+public class Coin : MonoBehaviour
 {
     private int coinsValue;
+    private ISpawner parentSpawner;
+    private int index;
 
     private void OnEnable()
     {
         coinsValue = Random.Range(5, 25);
         Expand();
+    }
+
+    public void RegisterParentSpawner(ISpawner sender, int coinIndex)
+    {
+        parentSpawner = sender;
+        index = coinIndex;
     }
 
     private void Shrink()
@@ -30,7 +38,7 @@ public class AnimationCoin : MonoBehaviour
         if (collision.CompareTag(ConstValues.PlayerTag))
         {
             UserInGameData.Instance.Coins += coinsValue;
-            gameObject.SetActive(false);
+            parentSpawner.OnDispose(index);
         }
     }
 }

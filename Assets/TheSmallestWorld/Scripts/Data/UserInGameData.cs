@@ -19,19 +19,26 @@ public class UserInGameData : MonoBehaviour
             return instance;
         }
     }
-    public int ItemSelected
+
+    public bool AnyWeaponEquipped
+    {
+        get => bool.Parse(PlayerPrefs.GetString("AnyItemEquipped", "false"));
+        set => PlayerPrefs.SetString("AnyItemEquipped", value.ToString());
+    }
+
+    public int WeaponSelectedIndex
     {
         get => PlayerPrefs.GetInt("ItemSelected", 0);
         set
         {
             PlayerPrefs.SetInt("ItemSelected", value);
             StaticActions.OnItemSelectedChanged?.Invoke();
-            Debug.Log("Selected new item");
         }
     }
+
     public int Coins
     {
-        get => PlayerPrefs.GetInt("CoinsData", 5000);
+        get => PlayerPrefs.GetInt("CoinsData", 0);
         set
         {
             PlayerPrefs.SetInt("CoinsData", value);
@@ -63,7 +70,7 @@ public class UserInGameData : MonoBehaviour
 
     private string ItemsAvailablityPrefs
     {
-        get => PlayerPrefs.GetString("ItemsAvailablityPrefs", "false, true, false");
+        get => PlayerPrefs.GetString("ItemsAvailablityPrefs", "false, false, false"); 
         set => PlayerPrefs.SetString("ItemsAvailablityPrefs", value);
     }
 

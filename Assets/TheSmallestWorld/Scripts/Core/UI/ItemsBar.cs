@@ -7,10 +7,6 @@ public class ItemsBar : MonoBehaviour
     private ShopData data;
     [SerializeField] private List<Image> images;
 
-    //[SerializeField] private Image axeImage;
-    //[SerializeField] private Image clubImage;
-    //[SerializeField] private Image staffImage;
-
     private Color colorAvailable = new Color(1f, 1f, 1f, .5f);
     private Color colorDisabled = new Color(1f, 1f, 1f, 0f);
     private Color colorSelected = Color.white;
@@ -18,9 +14,24 @@ public class ItemsBar : MonoBehaviour
     private void OnEnable()
     {
         data = new ShopData();
+
+        CheckAnyWeaponAvailability();
+
         StaticActions.OnItemsChanged += UpdateItemBarView;
         StaticActions.OnItemSelectedChanged += UpdateItemBarView;
         UpdateItemBarView();
+    }
+
+    private void CheckAnyWeaponAvailability()
+    {
+        for (int i = 0; i < data.Items.Count; i++)
+        {
+            if (UserInGameData.Instance.ItemIsAvailable(i))
+            {
+                return;
+            }
+        }
+        UserInGameData.Instance.AnyWeaponEquipped = false;
     }
 
     private void OnDisable()
@@ -37,7 +48,7 @@ public class ItemsBar : MonoBehaviour
             if (UserInGameData.Instance.ItemIsAvailable(i))
             {
                 images[i].color = colorAvailable;
-                if (i == UserInGameData.Instance.ItemSelected)
+                if (i == UserInGameData.Instance.WeaponSelectedIndex && UserInGameData.Instance.AnyWeaponEquipped)
                 {
                     images[i].color = colorSelected;
                 }
@@ -51,6 +62,10 @@ public class ItemsBar : MonoBehaviour
 
     public void SelectItem(int index)
     {
-        UserInGameData.Instance.ItemSelected = index;
+        if (UserInGameData.Instance.ItemIsAvailable(index))
+        {
+            UserInGameData.Instance.AnyWeaponEquipped = true;
+            UserInGameData.Instance.WeaponSelectedIndex = index;
+        }
     }
 }

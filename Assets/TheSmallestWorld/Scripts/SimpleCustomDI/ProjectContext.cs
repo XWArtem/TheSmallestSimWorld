@@ -6,11 +6,13 @@ public class ProjectContext : MonoBehaviour
 {
     [SerializeField] private MainHero mainHero;
     [SerializeField] private InputHandButton inputHandButton;
-    [SerializeField] private List<Vendor> vendors = new List<Vendor>();
+    [SerializeField] private List<Vendor> vendors = new List<Vendor>(); // there may be more vendors in the future for sure
     [SerializeField] private LevelSceneController levelSceneController;
     [SerializeField] private PopupShopController vendorController;
     [SerializeField] private ResourcesDisplay resourcesDisplay;
     [SerializeField] private List<TreeView> trees;
+    [SerializeField] private CoinsSpawner coinsSpawner;
+    [SerializeField] private TrashCan trashCan;
 
     private void Awake()
     {
@@ -20,6 +22,7 @@ public class ProjectContext : MonoBehaviour
         {
             vendor.Init(mainHero);
         }
+        trashCan.Init(mainHero);
 
         int treesIndex = Random.Range(0, 4);
 
@@ -29,8 +32,9 @@ public class ProjectContext : MonoBehaviour
         }
 
         vendorController.Init();
+        
         resourcesDisplay.Init();
-
+        coinsSpawner.Init();
 
 
 

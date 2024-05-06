@@ -1,5 +1,3 @@
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
-
 public class ItemWeapon : ItemBase
 {
     public int DamagePerAttack;

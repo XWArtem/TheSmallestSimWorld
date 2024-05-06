@@ -29,7 +29,16 @@ public class MainHero : MonoBehaviour
 
     private void UpdateWeaponView()
     {
-        weaponSpriteRenderer.sprite = weaponSprites[UserInGameData.Instance.ItemSelected];
+        if (UserInGameData.Instance.ItemIsAvailable(UserInGameData.Instance.WeaponSelectedIndex)
+            && UserInGameData.Instance.AnyWeaponEquipped)
+        {
+            weaponSpriteRenderer.enabled = true;
+            weaponSpriteRenderer.sprite = weaponSprites[UserInGameData.Instance.WeaponSelectedIndex];
+        }
+        else
+        {
+            weaponSpriteRenderer.enabled = false;
+        }
     }
 
     public void SetInteractionStatus(IInteractable sender, bool interactionAvailable, Action callback)

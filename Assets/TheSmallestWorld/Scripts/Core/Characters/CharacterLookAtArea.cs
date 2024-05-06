@@ -52,6 +52,6 @@ public class CharacterLookAtArea : MonoBehaviour
 
     private void ResetRotation()
     {
-        transform.parent.transform.DORotate(new Vector3(0f,0f, startRotationZ), 0.4f);
+        transform.parent.transform.DORotate(new Vector3(0f, 0f, startRotationZ), 0.4f);
     }
 }
